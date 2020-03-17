@@ -35,3 +35,6 @@ Average_month_temp_rain <- BOM_d_temp_rain %>%
 
 Temp_diff <- mutate(Average_month_temp_rain, Temp_diff=mean_max_Temp-mean_min_Temp) %>% 
   arrange(Temp_diff)
+
+#CHALLENGE 3
+
