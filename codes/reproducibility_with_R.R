@@ -10,11 +10,8 @@ BOM_s <- read_csv("data/BOM_stations.csv")
 
 #CHALLENGE 1
 #create a dataset by grouping station_numbers and filtering with all the values except "-/-" within the variable Temp_min_max
-BOM_d_temp <- BOM_d %>% 
-  group_by(Station_number) %>% 
-  filter(Temp_min_max != "-/-")
 
-BOM_d_temp_sep <- separate(BOM_d_temp, Temp_min_max, into = c("Temp_min", "Temp_max"), sep="/")
+BOM_d_temp_sep <- separate(BOM_d, Temp_min_max, into = c("Temp_min", "Temp_max"), sep="/")
 
 
 BOM_d_temp_rain <- filter(BOM_d_temp_sep, Temp_min !="-" & Temp_max !="-" & Rainfall!="-")
@@ -37,4 +34,9 @@ Temp_diff <- mutate(Average_month_temp_rain, Temp_diff=mean_max_Temp-mean_min_Te
   arrange(Temp_diff)
 
 #CHALLENGE 3
+BOM_s_long <- gather(BOM_s, key = "Station_number", value = "data", -info) #gather the data
+BOM_s_wide <- spread(BOM_s_long, key="info", value="data")
+
+
+
 
