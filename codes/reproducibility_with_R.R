@@ -33,7 +33,7 @@ Average_month_temp_rain <- BOM_d_temp_rain %>%
 Temp_diff <- mutate(Average_month_temp_rain, Temp_diff=mean_max_Temp-mean_min_Temp) %>% 
   arrange(Temp_diff)
 
-#CHALLENGE 3 (answer is ACT)
+#CHALLENGE 3 (answer is VIC)
 BOM_s_long <- gather(BOM_s, key = "Station_number", value = "data", -info) #gather the data
 BOM_s_wide <- spread(BOM_s_long, key="info", value="data")
 
@@ -48,8 +48,11 @@ Average_state_temp_rain <- combined_ds %>%
   group_by(state) %>% 
   summarise(mean_state_min_temp=mean(mean_min_Temp), mean_state_max_temp=mean(mean_max_Temp)) %>% 
   arrange(mean_state_min_temp)
-  
-#Challenge 4 (answeris lowest longitude's average solar exp is 19.18 and highest longitude's average solar exposure is 19.49)
+
+Temp_diff_state <- mutate(Average_state_temp_rain, Temp_diff=mean_state_max_temp-mean_state_min_temp) %>% 
+  arrange(Temp_diff)
+
+#Challenge 4 (answer is lowest longitude's average solar exp is 19.18 and highest longitude's average solar exposure is 19.49)
 BOM_d_sun_exp <- BOM_d %>% 
   filter(Solar_exposure!="-")
 
