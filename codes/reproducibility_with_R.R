@@ -37,20 +37,16 @@ Temp_diff <- mutate(Average_month_temp_rain, Temp_diff=mean_max_Temp-mean_min_Te
 BOM_s_long <- gather(BOM_s, key = "Station_number", value = "data", -info) #gather the data
 BOM_s_wide <- spread(BOM_s_long, key="info", value="data")
 
-BOM_stations <- group_by(BOM_d_temp_rain, Station_number) %>% 
-  summarise(mean_min_Temp=mean(Temp_min), mean_max_Temp=mean(Temp_max), mean_Rainfall=mean(Rainfall))
 
-BOM_s_wide$Station_number <- as.numeric(BOM_s_wide$Station_number)
+#codes from Elise for Challenge 3
 
-combined_ds <- inner_join(BOM_stations, BOM_s_wide, by="Station_number")
+joined_data <- full_join(BOM_d_temp_rain, BOM_s_wide, by="Station_number")
 
-Average_state_temp_rain <- combined_ds %>% 
-  group_by(state) %>% 
-  summarise(mean_state_min_temp=mean(mean_min_Temp), mean_state_max_temp=mean(mean_max_Temp)) %>% 
-  arrange(mean_state_min_temp)
+Q3 <- group_by(joined_data, state) %>% 
+  mutate(daily_temp_diff = Temp_max - Temp_min) %>% 
+  summarise(mean_daily_temp_diff = mean(daily_temp_diff, na.rm = T)) %>% #can also use drop.na() instead
+  filter(mean_daily_temp_diff == min(mean_daily_temp_diff))
 
-Temp_diff_state <- mutate(Average_state_temp_rain, Temp_diff=mean_state_max_temp-mean_state_min_temp) %>% 
-  arrange(Temp_diff)
 
 #Challenge 4 (answer is lowest longitude's average solar exp is 19.18 and highest longitude's average solar exposure is 19.49)
 BOM_d_sun_exp <- BOM_d %>% 
@@ -64,3 +60,8 @@ lon_compare <- inner_join(Station_mean_sun_exp, BOM_s_wide, by="Station_number")
   group_by(lon) %>% 
   summarise(mean_sun_exp_lon=mean(mean_sun_exp))%>%
   arrange(lon)
+
+BOM_d_sun_exp$Solar_exposure <- as.numeric(BOM_d_sun_exp$Solar_exposure) %>% 
+  group_by(BOM_d_sun_exp, Station_number) %>% 
+  summarise(mean_sun_exp=mean(Solar_exposure))
+
