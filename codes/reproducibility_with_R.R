@@ -56,12 +56,11 @@ BOM_d_sun_exp$Solar_exposure <- as.numeric(BOM_d_sun_exp$Solar_exposure)
 Station_mean_sun_exp <- group_by(BOM_d_sun_exp, Station_number) %>% 
   summarise(mean_sun_exp=mean(Solar_exposure))
 
+BOM_s_wide$Station_number <- as.numeric(BOM_s_wide$Station_number)
+
 lon_compare <- inner_join(Station_mean_sun_exp, BOM_s_wide, by="Station_number") %>%
   group_by(lon) %>% 
   summarise(mean_sun_exp_lon=mean(mean_sun_exp))%>%
   arrange(lon)
 
-BOM_d_sun_exp$Solar_exposure <- as.numeric(BOM_d_sun_exp$Solar_exposure) %>% 
-  group_by(BOM_d_sun_exp, Station_number) %>% 
-  summarise(mean_sun_exp=mean(Solar_exposure))
 
