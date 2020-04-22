@@ -41,6 +41,8 @@ BOM_s_wide <- spread(BOM_s_long, key="info", value="data")
 
 #codes from Elise for Challenge 3
 
+BOM_d_temp_rain$Station_number <- as.character(BOM_d_temp_rain$Station_number)
+
 joined_data <- full_join(BOM_d_temp_rain, BOM_s_wide, by="Station_number")
 
 Q3 <- group_by(joined_data, state) %>% 
